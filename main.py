@@ -20,7 +20,7 @@ class Widget(QWidget):
         # Left Widget
         self.table = QTableWidget()
         self.table.setColumnCount(2)
-        self.table.setHorizontalHeaderLabels(["Description", "Price"])
+        self.table.setHorizontalHeaderLabels(["Description", "Price ($)"])
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
         # Chart
