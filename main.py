@@ -4,7 +4,7 @@ from PySide6.QtCore import Qt, Slot
 from PySide6.QtGui import QAction , QPainter
 from PySide6.QtWidgets import (QApplication, QHeaderView, QHBoxLayout, QLabel, QLineEdit, 
                                QMainWindow, QPushButton, QTableWidget, QTableWidgetItem, QVBoxLayout, 
-                               QWidget)
+                               QWidget, QMessageBox)
 from PySide6.QtCharts import QChartView, QPieSeries, QChart
 
 
@@ -88,8 +88,10 @@ class Widget(QWidget):
             self.price.setText("")
 
             self.items += 1
-        except ValueError:
-            print("Invalid input:", price, "Make sure to enter a price!")
+        except ValueError as e:
+            # Display an error message box with the ValueError information
+            error_message = f"Invalid input: {price}\nPlease enter a valid Price!"
+            QMessageBox.critical(self, "Error", error_message)
 
 
     @Slot()
