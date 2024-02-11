@@ -10,7 +10,7 @@
         const { execFile } = require('child_process');
         const path = require('path');
 
-        const executablePath = path.join(__dirname, 'main');
+        const executablePath = path.join(__dirname, 'main.exe');
 
         execFile(executablePath, (error, stdout, stderr) => {
             if (error) {
