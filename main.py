@@ -1,7 +1,8 @@
 # Add dependencies
 import sys
+from matplotlib import cm
 from PySide6.QtCore import Qt, Slot
-from PySide6.QtGui import QAction , QPainter
+from PySide6.QtGui import QAction , QPainter, QBrush, QColor
 from PySide6.QtWidgets import (QApplication, QHeaderView, QHBoxLayout, QLabel, QLineEdit, 
                                QMainWindow, QPushButton, QTableWidget, QTableWidgetItem, QVBoxLayout, 
                                QWidget, QMessageBox)
@@ -25,6 +26,9 @@ class Widget(QWidget):
         # Chart
         self.chart_view = QChartView()
         self.chart_view.setRenderHint(QPainter.Antialiasing)
+
+        colormap = cm.get_cmap("tab20c", 40)  # You can choose a different colormap
+        self.colors = [QColor.fromRgbF(*colormap(i)[:3]) for i in range(0,40,2)]
 
         # Right Widget
         self.description = QLineEdit()
@@ -105,10 +109,14 @@ class Widget(QWidget):
     def plot_data(self):
         # Get table information
         series = QPieSeries()
+        
         for i in range(self.table.rowCount()):
             text = self.table.item(i, 0).text()
             number = float(self.table.item(i, 1).text())
-            series.append(text, number)
+
+            color = self.colors[i % len(self.colors)]
+            slice_item = series.append(text, number)
+            slice_item.setBrush(QBrush(color))
 
         chart = QChart()
         chart.addSeries(series)
