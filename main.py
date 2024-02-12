@@ -1,5 +1,6 @@
 # Add dependencies
 import sys
+import sqlite3
 from matplotlib import cm
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtGui import QAction , QPainter, QBrush, QColor
@@ -16,6 +17,10 @@ class Widget(QWidget):
         self.items = 0
         #Dummy Data
         self._data = {"Rent": 1600, "Grocery": 300, "Water": 50, "Coffee": 45, "Phone": 30, "Internet": 60}
+
+
+        # Database connection
+        self.connect_to_sqlite()
 
         # Left Widget
         self.table = QTableWidget()
@@ -72,6 +77,33 @@ class Widget(QWidget):
 
         # Fill example data
         self.fill_table()
+        self.fetch_data_from_database()
+
+    def connect_to_sqlite(self):
+        self.connection = sqlite3.connect("expenses.db")
+        self.cursor = self.connection.cursor()
+
+        # Create expenses table if not exists
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS expenses (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                description TEXT NOT NULL,
+                price REAL NOT NULL
+            )
+        """)
+        self.connection.commit()
+
+    def fetch_data_from_database(self):
+        self.cursor.execute("SELECT * FROM expenses")
+        rows = self.cursor.fetchall()
+        for row in rows:
+            description_item = QTableWidgetItem(row[1])
+            price_item = QTableWidgetItem(f"{row[2]:.2f}")
+            price_item.setTextAlignment(Qt.AlignRight)
+            self.table.insertRow(self.items)
+            self.table.setItem(self.items, 0, description_item)
+            self.table.setItem(self.items, 1, price_item)
+            self.items += 1
 
     @Slot()
     def add_element(self):
@@ -79,7 +111,11 @@ class Widget(QWidget):
         price = self.price.text()
 
         try:
-            price_item = QTableWidgetItem(f"{float(price):.2f}")
+            price_value = float(price)
+            self.cursor.execute("INSERT INTO expenses (description, price) VALUES (?, ?)", (des, price_value))
+            self.connection.commit()
+
+            price_item = QTableWidgetItem(f"{price_value:.2f}")
             price_item.setTextAlignment(Qt.AlignRight)
 
             self.table.insertRow(self.items)
@@ -96,6 +132,13 @@ class Widget(QWidget):
             # Display an error message box with the ValueError information
             error_message = f"Invalid input: {price}\nPlease enter a valid Price!"
             QMessageBox.critical(self, "Error", error_message)
+
+    @Slot()
+    def clear_table(self):
+        self.cursor.execute("DELETE FROM expenses")
+        self.connection.commit()
+        self.table.setRowCount(0)
+        self.items = 0
 
 
     @Slot()
