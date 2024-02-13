@@ -7,12 +7,13 @@ Welcome to **PennyWise Expense Tracker**! 📊 This desktop application simplifi
 
 To start using PennyWise:
 
-1. Download the executable from the provided link. (https://github.com/Gnanadeep-Settykara/PennyWise/releases/download/v1.1.0/main.exe)
-2. Run the executable on your local machine.
-3. Use the 'Add' button to input your expenses into the table.
-4. Click 'Plot' to visualize the data using the chart feature.
-5. Explore additional functionalities such as deleting specific expenses or clearing the entire table.
-6. Quit the application conveniently through the 'File' menu.
+1. Download the executable from the provided link.
+   Download Link: (https://github.com/Gnanadeep-Settykara/PennyWise/releases/download/v1.1.0/main.exe)
+3. Run the executable on your local machine.
+4. Use the 'Add' button to input your expenses into the table.
+5. Click 'Plot' to visualize the data using the chart feature.
+6. Explore additional functionalities such as deleting specific expenses or clearing the entire table.
+7. Quit the application conveniently through the 'File' menu.
 
 ## Preview 📸
 
